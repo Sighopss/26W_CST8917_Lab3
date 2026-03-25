@@ -404,7 +404,9 @@ Service Bus messages arrive base64-encoded. You need two steps to decode and par
 
 1. Click **+ New step** → **Parse JSON**
 2. **Content**: select **Body** from the **Call Check-Booking Function** step
-3. **Schema**: use this sample payload:
+3. **Schema**: do **not** use a sample payload here — the auto-generated schema won't handle `null` values correctly. Instead, click **Use sample payload to generate schema**, paste the sample below, click **Done**, then **manually edit the schema** to fix the nullable fields:
+
+   **Sample payload** (paste this to generate the initial schema):
 
 ```json
 {
@@ -430,6 +432,22 @@ Service Bus messages arrive base64-encoded. You need two steps to decode and par
     "reason": "Vehicle V001 (sedan) available in Ottawa"
 }
 ```
+
+   **After generating**, click **Edit** on the schema and change these two properties to allow `null` (rejected bookings return `null` for these fields):
+
+   ```json
+   "vehicleId": {
+       "type": ["string", "null"]
+   }
+   ```
+
+   ```json
+   "estimatedPrice": {
+       "type": ["integer", "null"]
+   }
+   ```
+
+> **Why?** When a booking is rejected, the Azure Function returns `null` for `vehicleId` and `estimatedPrice` since no vehicle was assigned. The default generated schema defines these as `"type": "string"` and `"type": "integer"`, which do not permit `null` — causing a validation error on the Parse JSON step. Using `["string", "null"]` and `["integer", "null"]` tells the schema that both a value and `null` are acceptable.
 
 4. Click **Done**
 5. Rename to `Parse Function Response`
