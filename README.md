@@ -88,4 +88,4 @@ The following resources are provisioned in resource group `rg-serverless-lab3`:
 
 ## Demo Video
 
-[YouTube link here]
+[https://youtu.be/OaFM36mQIVo]
