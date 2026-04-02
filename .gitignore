@@ -1,0 +1,15 @@
+# Azure Functions local settings (contains secrets)
+local.settings.json
+
+# Kiro IDE files
+.kiro/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.env
+
+# Testing
+.hypothesis/
+.pytest_cache/
